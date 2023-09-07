@@ -10,11 +10,12 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 const scene = new THREE.Scene();
 
 //camera 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.5, 500);
 
 //render
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
+  antialias: true,
 });
 
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -25,18 +26,34 @@ camera.position.setX(-3);
 renderer.render(scene, camera);
 
 // Shape Tours
-const geometry = new THREE.TorusGeometry(10,3,16,100)
-const material = new THREE.MeshStandardMaterial({color: 0xFF6347 });
-const torus = new THREE.Mesh(geometry, material);
-scene.add(torus)
+// const geometry1 = new THREE.TorusGeometry(10,3,16,10)
+// const material1 = new THREE.MeshStandardMaterial({color: 0xFF6347 });
+// const torus = new THREE.Mesh(geometry1, material1); 
+// scene.add(torus)
+
+//Shape Earth sphere
+const earthTexture = new THREE.TextureLoader().load('earthmap1k.jpg');
+const earthNormalTexture = new THREE.TextureLoader().load('earthbump1k.jpg');
+
+const earthGeometry = new THREE.SphereGeometry(3, 32, 32);
+const earthMaterial = new THREE.MeshStandardMaterial({
+  map: earthTexture,
+  normalMap : earthNormalTexture,
+});
+const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+scene.add(earth);
+
+
 
 // pointing light
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(5, 5, 5);
+const pointLight = new THREE.PointLight(0xffffff, 100, 0);
+pointLight.position.set(5, 15, 5);
+
+
 scene.add(pointLight);
 
 // ambient light
-const ambientLight = new THREE.AmbientLight(0xffffff);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
 // light helper
@@ -49,11 +66,11 @@ scene.add(lightHelper, gridHelper);
 const controls = new OrbitControls(camera, renderer.domElement);
 
 function addStar() {
-    const geometry = new THREE.SphereGeometry(0.25, 24, 24);
+    const geometry = new THREE.SphereGeometry(0.05, 3, 4,6.283185307179586,6.283185307179586,6.283185307179586,6.283185307179586);
     const material = new THREE.MeshStandardMaterial({color: 0xffffff});
     const star = new THREE.Mesh(geometry, material);
 
-    const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread( 100) );
+    const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread( 20) );
 
     star.position.set(x, y, z);
     scene.add(star);
@@ -61,14 +78,15 @@ function addStar() {
 
 Array(200).fill().forEach(addStar);
 
-
+earth.rotation.x += 0.35;
 //Animation loop
 function animate() {
   requestAnimationFrame(animate);
-
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.005;
-  torus.rotation.z += 0.01;
+  
+  earth.rotation.y += 0.01;
+  // torus.rotation.x += 0.01;
+  // torus.rotation.y += 0.005;
+  // torus.rotation.z += 0.01;
 
   controls.update();
 
