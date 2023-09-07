@@ -20,8 +20,8 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.setZ(30);
-camera.position.setX(-3);
+camera.position.setZ(10);
+// camera.position.setX(-3);
 
 renderer.render(scene, camera);
 
@@ -33,7 +33,7 @@ renderer.render(scene, camera);
 
 //Shape Earth sphere
 const earthTexture = new THREE.TextureLoader().load('earthmap1k.jpg');
-const earthNormalTexture = new THREE.TextureLoader().load('earthbump1k.jpg');
+const earthNormalTexture = new THREE.TextureLoader().load('earthspec1k.jpg');
 
 const earthGeometry = new THREE.SphereGeometry(3, 32, 32);
 const earthMaterial = new THREE.MeshStandardMaterial({
@@ -47,7 +47,7 @@ scene.add(earth);
 
 // pointing light
 const pointLight = new THREE.PointLight(0xffffff, 100, 0);
-pointLight.position.set(5, 15, 5);
+pointLight.position.set(5, 5, 5);
 
 
 scene.add(pointLight);
@@ -83,7 +83,7 @@ earth.rotation.x += 0.35;
 function animate() {
   requestAnimationFrame(animate);
   
-  earth.rotation.y += 0.01;
+  // earth.rotation.y += 0.01;
   // torus.rotation.x += 0.01;
   // torus.rotation.y += 0.005;
   // torus.rotation.z += 0.01;
