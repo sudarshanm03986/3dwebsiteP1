@@ -10,7 +10,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 const scene = new THREE.Scene();
 
 //camera 
-const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.5, 500);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000);
 
 //render
 const renderer = new THREE.WebGLRenderer({
@@ -25,6 +25,9 @@ camera.position.setZ(10);
 
 renderer.render(scene, camera);
 
+const bgcolor =  new THREE.Color(0x03a5fc);
+scene.background = bgcolor;
+
 // Shape Tours
 // const geometry1 = new THREE.TorusGeometry(10,3,16,10)
 // const material1 = new THREE.MeshStandardMaterial({color: 0xFF6347 });
@@ -32,28 +35,29 @@ renderer.render(scene, camera);
 // scene.add(torus)
 
 //Shape Earth sphere
-const earthTexture = new THREE.TextureLoader().load('earthmap1k.jpg');
-const earthNormalTexture = new THREE.TextureLoader().load('earthspec1k.jpg');
+// const earthTexture = new THREE.TextureLoader().load('earthmap1k.jpg');
+// const earthNormalTexture = new THREE.TextureLoader().load('earthspec1k.jpg');
 
-const earthGeometry = new THREE.SphereGeometry(3, 32, 32);
-const earthMaterial = new THREE.MeshStandardMaterial({
-  map: earthTexture,
-  normalMap : earthNormalTexture,
-});
-const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-scene.add(earth);
+// const earthGeometry = new THREE.SphereGeometry(3, 32, 32);
+// const earthMaterial = new THREE.MeshBasicMaterial({
+//   map: earthTexture,
+//   normalMap : earthNormalTexture,
+// });
+// const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+// scene.add(earth);
 
-
+const floorGeometry = new THREE.BoxGeometry(10, 0.1, 10);
+const floorMaterial = new THREE.MeshStandardMaterial({color: 0x0000ff});
+const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+scene.add(floor);
 
 // pointing light
 const pointLight = new THREE.PointLight(0xffffff, 100, 0);
 pointLight.position.set(5, 5, 5);
-
-
 scene.add(pointLight);
 
 // ambient light
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
 scene.add(ambientLight);
 
 // light helper
@@ -65,20 +69,19 @@ scene.add(lightHelper, gridHelper);
 //mouse move
 const controls = new OrbitControls(camera, renderer.domElement);
 
-function addStar() {
-    const geometry = new THREE.SphereGeometry(0.05, 3, 4,6.283185307179586,6.283185307179586,6.283185307179586,6.283185307179586);
-    const material = new THREE.MeshStandardMaterial({color: 0xffffff});
-    const star = new THREE.Mesh(geometry, material);
+// function addStar() {
+//     const geometry = new THREE.SphereGeometry(0.05, 3, 4,6.283185307179586,6.283185307179586,6.283185307179586,6.283185307179586);
+//     const material = new THREE.MeshStandardMaterial({color: 0xffffff});
+//     const star = new THREE.Mesh(geometry, material);
 
-    const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread( 20) );
+//     const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread( 20) );
 
-    star.position.set(x, y, z);
-    scene.add(star);
-}
+//     star.position.set(x, y, z);
+//     scene.add(star);
+// }
 
-Array(200).fill().forEach(addStar);
+// Array(200).fill().forEach(addStar);
 
-earth.rotation.x += 0.35;
 //Animation loop
 function animate() {
   requestAnimationFrame(animate);
